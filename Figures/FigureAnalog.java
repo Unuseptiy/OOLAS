@@ -1,25 +1,42 @@
 package Figures;
 import MyVector.MyVector;
 
-// написать класс Point, хранящий точку. Переписать методы в Figure: Move, Print и конструктор.
-// Переписать с этим учетом методы в потомках. Особое поведение у класса Circle.
-//
-// Суперкласс хранит массив точек.
+class Point {
+    double x, y;
 
+    public void Point(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+}
 
+public class FigureAnalog {
+    Point[] points;
 
-public class Figure {
-    void Print() {}
+    public void FigureAnalog(Point[] points) {
+        this.points = points;
+    }
 
-    void Move() {}
+    void Print() {
+        System.out.println("(" + Double.toString(points[0].x) + Double.toString(points[0].y) + ")");
+        for (int i = 1; i <= points.length; i ++) {
+            System.out.println(", (" + Double.toString(points[i].x) + Double.toString(points[i].y) + ")");
+        }
+    }
+
+    void Move(MyVector v, double move_length) {
+        for (int i = 0; i <= points.length; i ++) {
+
+        }
+    }
 
     double SetSquare() {
         return 0;
     }
-
 }
 
-class Triangle extends Figure {
+
+class TriangleAnalog extends Figure {
     private double x1, x2, x3, y1, y2, y3;
 
     public Triangle(double x1, double x2, double x3, double y1, double y2, double y3){
@@ -33,8 +50,8 @@ class Triangle extends Figure {
 
     public void Print() {
         System.out.println("(" + Double.toString(x1) + ", " + Double.toString(y1) + "), ("
-                               + Double.toString(x2) + ", " + Double.toString(y2) + "), ("
-                               + Double.toString(x3) + ", " + Double.toString(y3) + ")"   );
+                + Double.toString(x2) + ", " + Double.toString(y2) + "), ("
+                + Double.toString(x3) + ", " + Double.toString(y3) + ")"   );
     }
 
     public void Move(MyVector v, double move_length) {
@@ -57,7 +74,7 @@ class Triangle extends Figure {
     }
 }
 
-class Circle extends Figure {
+class CircleAnalog extends Figure {
     private double x, y, R;
 
     public Circle(double x, double y, double R){
@@ -83,7 +100,7 @@ class Circle extends Figure {
     }
 }
 
-class Rectangle extends Figure {
+class RectangleAnalog extends Figure {
     private double x1, x2, x3, x4, y1, y2, y3, y4;
 
     public Rectangle(double x1, double x2, double x3, double x4, double y1, double y2, double y3, double y4){
@@ -128,4 +145,3 @@ class Rectangle extends Figure {
         return Math.abs(.5 * (x1 * (y2 - y4) + x2 * (y3 - y1) + x3 * (y4 - y2) + x4 * (y1 - y3)));
     }
 }
-
