@@ -3,42 +3,115 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package figure;
+package figuretmp;
+import java.util.ArrayList;
+import java.util.Random;
 import myvector.MyVector;
 
 /**
  *
  * @author student
  */
-public class Figure {
+public class FigureTmp {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Triangle t = new Triangle(0, 0, 5, 0, 4, 0);
-        t.Print();
-        System.out.println(t.SetSquare());
-        Move.Move(t, new MyVector(0, 1), 10);
-        System.out.println();
-        t.Print();
+//        Random rand = new Random();
+//        ArrayList<Point> points = new ArrayList<>();
+//        for(int i = 0; i < 10; i ++){
+////            Point p = new Point(rand.nextDouble(), rand.nextDouble());
+//            Point p = new Point((double) 0, (double) 1);
+//            points.add(p);
+//        }
+////        System.out.print((double)10);
+//        FigureAnalog figure = new FigureAnalog(points);
+//        figure.Print();
+//        System.out.println();
+//        figure.Move(new MyVector((double)0, (double)1), (double)10);
+//        figure.Print();
+        ArrayList<Point> points = new ArrayList<>();
+        points.add(new Point((double)0, (double)0));
+        points.add(new Point((double)0, (double)4));
+        points.add(new Point((double)5, (double)0));
+        
+        FigureAnalog figure = new FigureAnalog(points);
+        figure.Print();
+        figure.SetSquare();
+
     }
     
-    void Print() {}
-
-    void Move() {}
-
-    double SetSquare() {
-        return 0;
-    }
-
 }
 
-class Triangle extends Figure {
-    public double x1, x2, x3, y1, y2, y3;
 
-    public Triangle(double x1, double x2, double x3, double y1, double y2, double y3){
+
+class Point {
+    double x, y;
+
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    public double getX() {
+        return this.x;
+    }
+    
+    public double getY() {
+        return this.y;
+    }
+    
+    public void setX(double x) {
+        this.x = x;
+    }
+    
+    public void setY() {
+        this.y = y; 
+    }
+}
+
+
+class FigureAnalog {
+    ArrayList<Point> points = new ArrayList<>();
+
+    public FigureAnalog(ArrayList<Point> points) {
+        this.points = points;
+    }
+
+    void Print() {
+//        System.out.println("(" + Double.toString(points.get(0).x) + Double.toString(points.get(0).y) + ")");
+        for (int i = 0; i < points.size(); i ++) {
+            System.out.println("(" + Double.toString(points.get(0).getX()) + ", " +  Double.toString(points.get(0).getY()) + ")");
+        }
+        
+    }
+
+    void Move(MyVector v, double move_length) {
+        v.vector_normalize();
+        v.multiply(move_length);
+        MyVector tmp_v;
+        for (int i = 0; i < points.size(); i ++) {
+            v = new MyVector(points.get(i).getX(), points.get(i).getY()).add(v);
+            points.set(i, new Point(v.getX(), v.getY()));
+        }
+    }
+
+    double SetSquare() {
+        double out = (double) 0;
+        for(int i = 0; i < points.size(); i ++){
+            out += points.get(i).getX() * (points.get((i + 1) % points.size()).getY() - points.get((i - 1) % points.size()).getY());
+        }
+        return out;
+    }
+}
+
+
+class TriangleAnalog extends FigureAnalog {
+    private double x1, x2, x3, y1, y2, y3;
+
+    public TriangleAnalog(double x1, double x2, double x3, double y1, double y2, double y3){
         this.x1 = x1;
         this.x2 = x2;
         this.x3 = x3;
@@ -49,8 +122,8 @@ class Triangle extends Figure {
 
     public void Print() {
         System.out.println("(" + Double.toString(x1) + ", " + Double.toString(y1) + "), ("
-                               + Double.toString(x2) + ", " + Double.toString(y2) + "), ("
-                               + Double.toString(x3) + ", " + Double.toString(y3) + ")"   );
+                + Double.toString(x2) + ", " + Double.toString(y2) + "), ("
+                + Double.toString(x3) + ", " + Double.toString(y3) + ")"   );
     }
 
     public void Move(MyVector v, double move_length) {
@@ -73,10 +146,10 @@ class Triangle extends Figure {
     }
 }
 
-class Circle extends Figure {
-    public double x, y, R;
+class CircleAnalog extends FigureAnalog {
+    private double x, y, R;
 
-    public Circle(double x, double y, double R){
+    public CircleAnalog(double x, double y, double R){
         this.x = x;
         this.y = y;
         this.R = R;
@@ -99,10 +172,10 @@ class Circle extends Figure {
     }
 }
 
-class Rectangle extends Figure {
-    public double x1, x2, x3, x4, y1, y2, y3, y4;
+class RectangleAnalog extends FigureAnalog {
+    private double x1, x2, x3, x4, y1, y2, y3, y4;
 
-    public Rectangle(double x1, double x2, double x3, double x4, double y1, double y2, double y3, double y4){
+    public RectangleAnalog(double x1, double x2, double x3, double x4, double y1, double y2, double y3, double y4){
         this.x1 = x1;
         this.x2 = x2;
         this.x3 = x3;
@@ -142,63 +215,5 @@ class Rectangle extends Figure {
 
     public double SetSquare() {
         return Math.abs(.5 * (x1 * (y2 - y4) + x2 * (y3 - y1) + x3 * (y4 - y2) + x4 * (y1 - y3)));
-    }
-}
-
-
-class Move {
-    public static void Move(Rectangle r, MyVector v, double move_length){
-        v.vector_normalize();
-        MyVector v1 = new MyVector(r.x1, r.y1).add(v.multiply(move_length));
-        MyVector v2 = new MyVector(r.x2, r.y2).add(v.multiply(move_length));
-        MyVector v3 = new MyVector(r.x3, r.y3).add(v.multiply(move_length));
-        MyVector v4 = new MyVector(r.x4, r.y4).add(v.multiply(move_length));
-
-        r.x1 = v1.getX();
-        r.x2 = v2.getX();
-        r.x3 = v3.getX();
-        r.x4 = v4.getX();
-
-        r.y1 = v1.getY();
-        r.y2 = v2.getY();
-        r.y3 = v3.getY();
-        r.y4 = v4.getY();
-    }
-    
-    public static void Move(Circle c, MyVector v, double move_length){
-        v.vector_normalize();
-        MyVector v1 = new MyVector(c.x, c.y).add(v.multiply(move_length));
-
-        c.x = v1.getX();
-        c.y = v1.getY();
-    }
-    
-    public static void Move(Triangle t, MyVector v, double move_length){
-        v.vector_normalize();
-        MyVector v1 = new MyVector(t.x1, t.y1).add(v.multiply(move_length));
-        MyVector v2 = new MyVector(t.x2, t.y2).add(v.multiply(move_length));
-        MyVector v3 = new MyVector(t.x3, t.y3).add(v.multiply(move_length));
-
-        t.x1 = v1.getX();
-        t.x2 = v2.getX();
-        t.x3 = v3.getX();
-        t.y1 = v1.getY();
-        t.y2 = v2.getY();
-        t.y3 = v3.getY();
-
-    }
-}
-
-class SetSquare {
-    public static double SetSquare(Rectangle r) {
-        return Math.abs(.5 * (r.x1 * (r.y2 - r.y4) + r.x2 * (r.y3 - r.y1) + r.x3 * (r.y4 - r.y2) + r.x4 * (r.y1 - r.y3)));
-    }
-    
-    public static double SetSquare(Circle c) {
-        return Math.PI * Math.pow(c.R, 2);
-    }
-    
-    public static double SetSquare(Triangle t) {
-       return Math.abs(.5 * (t.x1 * (t.y2 - t.y3) + t.x2 * (t.y3 - t.y1) + t.x3 * (t.y1 - t.y2)));
     }
 }
