@@ -23,6 +23,20 @@ public class Figure {
         Move.Move(t, new MyVector(0, 1), 10);
         System.out.println();
         t.Print();
+        
+        Rectangle r = new Rectangle(0, 0, 1, 1, 0, 1, 1, 0);
+        r.Print();
+        System.out.println(r.SetSquare());
+        Circle c = new Circle(0, 0, 10);
+        c.Print();
+        System.out.println(c.SetSquare());
+        
+        Figure[] f = new Figure[4];
+        f[0] = t;
+        f[1] = r;
+        f[2] = c;
+        f[3] = new Figure() {double a = 10; public double SetSquare(){return a * a;}};
+        System.out.println(utils.SquareSum(f));
     }
     
     void Print() {}
@@ -189,16 +203,25 @@ class Move {
     }
 }
 
-class SetSquare {
-    public static double SetSquare(Rectangle r) {
-        return Math.abs(.5 * (r.x1 * (r.y2 - r.y4) + r.x2 * (r.y3 - r.y1) + r.x3 * (r.y4 - r.y2) + r.x4 * (r.y1 - r.y3)));
+class utils {
+//    public static double SetSquare(Rectangle r) {
+//        return Math.abs(.5 * (r.x1 * (r.y2 - r.y4) + r.x2 * (r.y3 - r.y1) + r.x3 * (r.y4 - r.y2) + r.x4 * (r.y1 - r.y3)));
+//    }
+//    
+//    public static double SetSquare(Circle c) {
+//        return Math.PI * Math.pow(c.R, 2);
+//    }
+//    
+//    public static double SetSquare(Triangle t) {
+//       return Math.abs(.5 * (t.x1 * (t.y2 - t.y3) + t.x2 * (t.y3 - t.y1) + t.x3 * (t.y1 - t.y2)));
+//    }
+    
+    public static double SquareSum(Figure[] f){
+        double out = 0;
+        for(int i = 0; i < f.length; i ++) {
+            out += f[i].SetSquare();
+        }
+        return out;
     }
     
-    public static double SetSquare(Circle c) {
-        return Math.PI * Math.pow(c.R, 2);
-    }
-    
-    public static double SetSquare(Triangle t) {
-       return Math.abs(.5 * (t.x1 * (t.y2 - t.y3) + t.x2 * (t.y3 - t.y1) + t.x3 * (t.y1 - t.y2)));
-    }
 }
